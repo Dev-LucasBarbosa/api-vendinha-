@@ -3,6 +3,7 @@ package com.api_vendinha.api.domain.service;
 import com.api_vendinha.api.Infrastructure.repository.ProdutosRepository;
 import com.api_vendinha.api.Infrastructure.repository.UserRepository;
 import com.api_vendinha.api.domain.dtos.request.UserRequestDto;
+import com.api_vendinha.api.domain.dtos.response.ProdutosResponseDto;
 import com.api_vendinha.api.domain.dtos.response.UserResponseDto;
 import com.api_vendinha.api.domain.entities.Produtos;
 import com.api_vendinha.api.domain.entities.User;
@@ -14,7 +15,7 @@ import java.util.stream.Collectors;
 
 /**
  * Implementação do serviço de usuários.
- *
+ * <p>
  * Esta classe fornece a implementação dos métodos definidos na interface UserServiceInterface,
  * lidando com a lógica de negócios relacionada aos usuários, como criar e atualizar usuários.
  */
@@ -39,7 +40,7 @@ public class UserServiceImpl implements UserServiceInterface {
 
     /**
      * Salva um novo usuário ou atualiza um usuário existente.
-     *
+     * <p>
      * Cria uma nova entidade User a partir dos dados fornecidos no UserRequestDto, persiste essa
      * entidade no banco de dados, e retorna um UserResponseDto com as informações do usuário salvo.
      *
@@ -60,7 +61,7 @@ public class UserServiceImpl implements UserServiceInterface {
         // Salva o usuário no banco de dados e obtém a entidade persistida com o ID gerado.
         User savedUser = userRepository.save(user);
 
-        if(!userRequestDto.getProdutosRequestDtos().isEmpty()){
+        if (!userRequestDto.getProdutosRequestDtos().isEmpty()) {
             List<Produtos> produtos = userRequestDto.getProdutosRequestDtos().stream().map(
                     dto -> {
                         Produtos produto = new Produtos();
@@ -87,7 +88,7 @@ public class UserServiceImpl implements UserServiceInterface {
     }
 
     @Override
-    public UserResponseDto update(Long id, UserRequestDto userRequestDto){
+    public UserResponseDto update(Long id, UserRequestDto userRequestDto) {
         User userExist = userRepository.findById(id).orElseThrow();
         userExist.setName(userRequestDto.getName());
         userExist.setEmail(userRequestDto.getEmail());
@@ -105,11 +106,11 @@ public class UserServiceImpl implements UserServiceInterface {
         userResponseDto.setIs_active(userExist.getIs_active());
         userResponseDto.setCpf_cnpj(userExist.getCpf_cnpj());
 
-        return  userResponseDto;
+        return userResponseDto;
     }
 
     @Override
-    public UserResponseDto buscar(Long id){
+    public UserResponseDto buscar(Long id) {
         User userExist = userRepository.findById(id).orElseThrow();
 
         UserResponseDto userResponseDto = new UserResponseDto();
@@ -120,11 +121,11 @@ public class UserServiceImpl implements UserServiceInterface {
         userResponseDto.setIs_active(userExist.getIs_active());
         userResponseDto.setCpf_cnpj(userExist.getCpf_cnpj());
 
-        return  userResponseDto;
+        return userResponseDto;
     }
 
     @Override
-    public UserResponseDto status(Long id, UserRequestDto userRequestDto){
+    public UserResponseDto status(Long id, UserRequestDto userRequestDto) {
         User userExist = userRepository.findById(id).orElseThrow();
         userExist.setIs_active(userRequestDto.getIs_active());
 
@@ -138,11 +139,34 @@ public class UserServiceImpl implements UserServiceInterface {
         userResponseDto.setIs_active(userExist.getIs_active());
         userResponseDto.setCpf_cnpj(userExist.getCpf_cnpj());
 
-        return  userResponseDto;
+        return userResponseDto;
     }
 
-    public List<User> listarTodos() {
-        return userRepository.findAll();
+    public List<UserResponseDto> listarTodos() {
+
+        return userRepository.findAll().stream().map(user -> {
+
+            UserResponseDto userResponseDto = new UserResponseDto();
+            userResponseDto.setId(user.getId());
+            userResponseDto.setName(user.getName());
+            userResponseDto.setEmail(user.getEmail());
+            userResponseDto.setPassword(user.getPassword());
+            userResponseDto.setIs_active(user.getIs_active());
+            userResponseDto.setCpf_cnpj(user.getCpf_cnpj());
+
+
+            List<ProdutosResponseDto> produtosResponseDto =  user.getProdutos().stream().map(pr->{
+                ProdutosResponseDto produto = new ProdutosResponseDto();
+                produto.setId(pr.getId());
+                produto.setNome(pr.getNome());
+                produto.setQuantidade(pr.getQuantidade());
+                produto.setPreco(pr.getPreco());
+                return produto;
+            }).toList();
+
+            userResponseDto.setProdutos(produtosResponseDto);
+            return userResponseDto;
+        }).toList();
     }
 }
 

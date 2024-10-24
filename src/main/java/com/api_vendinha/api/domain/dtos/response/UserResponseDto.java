@@ -3,6 +3,9 @@ package com.api_vendinha.api.domain.dtos.response;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Data
 @NoArgsConstructor
 public class UserResponseDto {
@@ -12,6 +15,7 @@ public class UserResponseDto {
     private String password;
     private Boolean is_active;
     private String cpf_cnpj;
+    private List<ProdutosResponseDto> produtos = new ArrayList<>();
 
     public Long getId() {
         return id;
@@ -59,5 +63,13 @@ public class UserResponseDto {
 
     public void setCpf_cnpj(String cpf_cnpj) {
         this.cpf_cnpj = cpf_cnpj;
+    }
+
+    public List<ProdutosResponseDto> getProdutos() {
+        return produtos;
+    }
+
+    public void setProdutos(List<ProdutosResponseDto> produtos) {
+        this.produtos = produtos;
     }
 }

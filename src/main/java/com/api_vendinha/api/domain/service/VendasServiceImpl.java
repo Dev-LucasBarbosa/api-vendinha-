@@ -10,6 +10,8 @@ import com.api_vendinha.api.domain.entities.Vendas;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 
 @Service
 public class VendasServiceImpl implements VendasServiceInterface {
@@ -64,5 +66,10 @@ public class VendasServiceImpl implements VendasServiceInterface {
 
         // Retorna o DTO com as informações do usuário salvo.
         return vendasResponseDto;
+    }
+
+    @Override
+    public List<Vendas> listar() {
+        return vendasRepository.findAll();
     }
 }

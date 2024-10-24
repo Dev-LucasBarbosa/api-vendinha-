@@ -28,5 +28,5 @@ public interface UserServiceInterface {
 
     UserResponseDto status(Long id, UserRequestDto userRequestDto);
 
-    List<User> listarTodos();
+    List<UserResponseDto> listarTodos();
 }

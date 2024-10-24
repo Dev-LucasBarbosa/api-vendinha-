@@ -4,10 +4,13 @@ import com.api_vendinha.api.Infrastructure.repository.ProdutosRepository;
 import com.api_vendinha.api.Infrastructure.repository.UserRepository;
 import com.api_vendinha.api.domain.dtos.request.ProdutosRequestDto;
 import com.api_vendinha.api.domain.dtos.response.ProdutosResponseDto;
+import com.api_vendinha.api.domain.dtos.response.UserResponseDto;
 import com.api_vendinha.api.domain.entities.Produtos;
 import com.api_vendinha.api.domain.entities.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 
 @Service
@@ -68,5 +71,23 @@ public class ProdutosServiceImpl implements ProdutosServiceInterface {
         produtosResponseDto.setPreco(produtosExist.getPreco());
 
         return  produtosResponseDto;
+    }
+
+    @Override
+    public List<Produtos> listar() {
+        return produtosRepository.findAll();
+    }
+
+    @Override
+    public ProdutosResponseDto buscar(Long id) {
+        Produtos produtosExist = produtosRepository.findById(id).orElseThrow();
+
+        ProdutosResponseDto produtosResponseDto = new ProdutosResponseDto();
+        produtosResponseDto.setId(produtosExist.getId());
+        produtosResponseDto.setNome(produtosExist.getNome());
+        produtosResponseDto.setQuantidade(produtosExist.getQuantidade());
+        produtosResponseDto.setPreco(produtosExist.getPreco());
+
+        return produtosResponseDto;
     }
 }

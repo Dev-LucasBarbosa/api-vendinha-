@@ -61,7 +61,7 @@ public class UserController {
     }
 
     @GetMapping("/usuario/lista") // Define que este método lida com requisições HTTP POST.
-    public List<User> listarTodos() {
+    public List<UserResponseDto> listarTodos() {
         // Chama o serviço para salvar o usuário e retorna a resposta.
         return userService.listarTodos();
     }
