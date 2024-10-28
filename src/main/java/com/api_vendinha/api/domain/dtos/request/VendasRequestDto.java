@@ -5,7 +5,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class VendasRequestDto {
+public class  VendasRequestDto {
     private Long user_id;
     private Long product_id;
     private Integer quantity;

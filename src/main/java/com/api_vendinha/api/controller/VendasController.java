@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin("*")
 @RestController
 @RequestMapping("/api") // Define o caminho base para as requisições deste controlador.
 public class VendasController {
@@ -21,13 +22,13 @@ public class VendasController {
     }
 
     @PostMapping("/vendas") // Define que este método lida com requisições HTTP POST.
-    public VendasResponseDto criarVenda(@RequestBody VendasRequestDto vendasRequestDto) {
+    public VendasResponseDto salvar(@RequestBody VendasRequestDto vendasRequestDto) {
 
-        return vendasService.criaVenda(vendasRequestDto);
+        return vendasService.salvar(vendasRequestDto);
     }
 
     @GetMapping("/vendas/listar") // Define que este método lida com requisições HTTP POST.
-    public List<Vendas> listar() {
+    public List<VendasResponseDto> listar() {
         // Chama o serviço para salvar o usuário e retorna a resposta.
         return vendasService.listar();
     }

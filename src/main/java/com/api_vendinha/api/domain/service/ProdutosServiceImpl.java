@@ -90,4 +90,12 @@ public class ProdutosServiceImpl implements ProdutosServiceInterface {
 
         return produtosResponseDto;
     }
+
+    @Override
+    public List<Produtos> listarPorUsuario(Long userId) {
+        // Chama o repositório para buscar produtos pelo ID do usuário
+        return produtosRepository.findByUserId(userId);
+    }
+
+
 }

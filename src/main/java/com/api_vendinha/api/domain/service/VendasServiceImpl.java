@@ -4,6 +4,8 @@ import com.api_vendinha.api.Infrastructure.repository.ProdutosRepository;
 import com.api_vendinha.api.Infrastructure.repository.UserRepository;
 import com.api_vendinha.api.Infrastructure.repository.VendasRepository;
 import com.api_vendinha.api.domain.dtos.request.VendasRequestDto;
+import com.api_vendinha.api.domain.dtos.response.ProdutosResponseDto;
+import com.api_vendinha.api.domain.dtos.response.UserResponseDto;
 import com.api_vendinha.api.domain.dtos.response.VendasResponseDto;
 import com.api_vendinha.api.domain.entities.Produtos;
 import com.api_vendinha.api.domain.entities.Vendas;
@@ -30,7 +32,7 @@ public class VendasServiceImpl implements VendasServiceInterface {
     }
 
     @Override
-    public VendasResponseDto criaVenda(VendasRequestDto vendasRequestDto) {
+    public VendasResponseDto salvar(VendasRequestDto vendasRequestDto) {
 
         // Obtém o Produto pelo ID
         Produtos produto = produtosRepository.findById(vendasRequestDto.getProduct_id())
@@ -69,7 +71,29 @@ public class VendasServiceImpl implements VendasServiceInterface {
     }
 
     @Override
-    public List<Vendas> listar() {
-        return vendasRepository.findAll();
+    public List<VendasResponseDto> listar() {
+        return VendasRepository.findAll().stream().map(venda -> {
+
+            UserResponseDto userResponseDto = new UserResponseDto();
+            userResponseDto.setId(user.getId());
+            userResponseDto.setName(user.getName());
+            userResponseDto.setEmail(user.getEmail());
+            userResponseDto.setPassword(user.getPassword());
+            userResponseDto.setIs_active(user.getIs_active());
+            userResponseDto.setCpf_cnpj(user.getCpf_cnpj());
+
+
+            List<ProdutosResponseDto> produtosResponseDto =  user.getProdutos().stream().map(pr->{
+                ProdutosResponseDto produto = new ProdutosResponseDto();
+                produto.setId(pr.getId());
+                produto.setNome(pr.getNome());
+                produto.setQuantidade(pr.getQuantidade());
+                produto.setPreco(pr.getPreco());
+                return produto;
+            }).toList();
+
+            userResponseDto.setProdutos(produtosResponseDto);
+            return userResponseDto;
+        }).toList();
     }
 }

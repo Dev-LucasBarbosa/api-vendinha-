@@ -14,4 +14,6 @@ public interface ProdutosServiceInterface {
     List<Produtos> listar();
 
     ProdutosResponseDto buscar(Long id);
+
+    List<Produtos> listarPorUsuario(Long userId);
 }

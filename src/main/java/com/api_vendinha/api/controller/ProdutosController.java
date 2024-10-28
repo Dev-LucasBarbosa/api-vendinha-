@@ -47,4 +47,9 @@ public class ProdutosController {
         // Chama o serviço para salvar o usuário e retorna a resposta.
         return produtosService.listar();
     }
+
+    @GetMapping("/produtos/listar/{userId}")
+    public List<Produtos> listarPorUsuario(@PathVariable Long userId) {
+        return produtosService.listarPorUsuario(userId);
+    }
 }
