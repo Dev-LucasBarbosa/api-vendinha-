@@ -11,6 +11,8 @@ public class VendasResponseDto {
     private Long product_id;
     private Integer quantity;
     private Float price;
+    private String user_name;
+    private  String product_name;
 
     public Long getId() {
         return id;
@@ -50,5 +52,21 @@ public class VendasResponseDto {
 
     public void setPrice(Float price) {
         this.price = price;
+    }
+
+    public String getUser_name() {
+        return user_name;
+    }
+
+    public void setUser_name(String user_name) {
+        this.user_name = user_name;
+    }
+
+    public String getProduct_name() {
+        return product_name;
+    }
+
+    public void setProduct_name(String product_name) {
+        this.product_name = product_name;
     }
 }

@@ -39,7 +39,7 @@ public class VendasServiceImpl implements VendasServiceInterface {
                 .orElseThrow(() -> new RuntimeException("Produto não encontrado"));
 
         //Verifica a quantidade disponível
-        if (vendasRequestDto.getQuantity() > produto.getQuantidade()){
+        if (vendasRequestDto.getQuantity() > produto.getQuantidade()) {
             throw new RuntimeException("Quantidade solicitada excede a disponível em estoque");
         }
 
@@ -72,28 +72,26 @@ public class VendasServiceImpl implements VendasServiceInterface {
 
     @Override
     public List<VendasResponseDto> listar() {
-        return VendasRepository.findAll().stream().map(venda -> {
+        return vendasRepository.findAll().stream().map(venda -> {
+            VendasResponseDto vendasResponseDto = new VendasResponseDto();
+            vendasResponseDto.setId(venda.getId());
+            vendasResponseDto.setQuantity(venda.getQuantity());
+            vendasResponseDto.setPrice(venda.getPrice());
 
-            UserResponseDto userResponseDto = new UserResponseDto();
-            userResponseDto.setId(user.getId());
-            userResponseDto.setName(user.getName());
-            userResponseDto.setEmail(user.getEmail());
-            userResponseDto.setPassword(user.getPassword());
-            userResponseDto.setIs_active(user.getIs_active());
-            userResponseDto.setCpf_cnpj(user.getCpf_cnpj());
+            // Assume que cada venda tem um único usuário
+            if (venda.getUser() != null) {
+                vendasResponseDto.setUser_id(venda.getUser().getId());
+                vendasResponseDto.setUser_name(venda.getUser().getName());
+            }
 
+            // Assume que cada venda tem um único produto
+            if (venda.getProdutos() != null) {
+                vendasResponseDto.setProduct_id(venda.getProdutos().getId());
+                vendasResponseDto.setProduct_name(venda.getProdutos().getNome());
+            }
 
-            List<ProdutosResponseDto> produtosResponseDto =  user.getProdutos().stream().map(pr->{
-                ProdutosResponseDto produto = new ProdutosResponseDto();
-                produto.setId(pr.getId());
-                produto.setNome(pr.getNome());
-                produto.setQuantidade(pr.getQuantidade());
-                produto.setPreco(pr.getPreco());
-                return produto;
-            }).toList();
-
-            userResponseDto.setProdutos(produtosResponseDto);
-            return userResponseDto;
+            return vendasResponseDto; // Retorna o DTO de vendas
         }).toList();
     }
 }
+
